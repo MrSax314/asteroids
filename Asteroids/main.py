@@ -2,6 +2,7 @@ import math
 import time
 import pygame
 import random
+import os
 from pygame import mixer
 from objects import obj
 
@@ -11,8 +12,12 @@ pygame.init()
 # Screen Creation / Caption and Icon
 ScreenHeight = 600
 ScreenWidth = 800
+
 screen = pygame.display.set_mode((ScreenWidth, ScreenHeight))
-icon = pygame.image.load("ship.png")
+current_path = os.path.dirname('F:/4 Scripts/asteroids/Asteroids/') # Where your .py file is located
+print(current_path)
+resource_path = os.path.join(current_path, 'resources') # The resource folder path
+icon = pygame.image.load(os.path.join(resource_path,"ship.png"))
 pygame.display.set_caption("Asteroids")
 pygame.display.set_icon(icon)
 
@@ -36,14 +41,14 @@ playerImg = [pygame.image.load("ship-uuu.png"), pygame.image.load("ship-1.png"),
              pygame.image.load("ship-rrr.png"), pygame.image.load("ship-rrr.png"), pygame.image.load("ship-rrr.png"),
              pygame.image.load("ship-uuu.png"), pygame.image.load("ship-uuu.png"), pygame.image.load("ship-uuu.png"), ]
 '''
-playerImg = [pygame.image.load("ship-0.png"), pygame.image.load("ship-1.png"), pygame.image.load("ship-2.png"),
-             pygame.image.load("ship-3.png"), pygame.image.load("ship-4.png"), pygame.image.load("ship-5.png"),
-             pygame.image.load("ship-6.png"), pygame.image.load("ship-7.png"), pygame.image.load("ship-8.png"),
-             pygame.image.load("ship-9.png"), pygame.image.load("ship-10.png"), pygame.image.load("ship-11.png"),
-             pygame.image.load("ship-12.png"), pygame.image.load("ship-13.png"), pygame.image.load("ship-14.png"),
-             pygame.image.load("ship-15.png"), pygame.image.load("ship-16.png"), pygame.image.load("ship-17.png"),
-             pygame.image.load("ship-18.png"), pygame.image.load("ship-19.png"), pygame.image.load("ship-20.png"),
-             pygame.image.load("ship-21.png"), pygame.image.load("ship-22.png"), pygame.image.load("ship-23.png"), ]
+playerImg = [pygame.image.load(os.path.join(resource_path,"ship-0.png")), pygame.image.load(os.path.join(resource_path,"ship-1.png")), pygame.image.load(os.path.join(resource_path,"ship-2.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-3.png")), pygame.image.load(os.path.join(resource_path,"ship-4.png")), pygame.image.load(os.path.join(resource_path,"ship-5.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-6.png")), pygame.image.load(os.path.join(resource_path,"ship-7.png")), pygame.image.load(os.path.join(resource_path,"ship-8.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-9.png")), pygame.image.load(os.path.join(resource_path,"ship-10.png")), pygame.image.load(os.path.join(resource_path,"ship-11.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-12.png")), pygame.image.load(os.path.join(resource_path,"ship-13.png")), pygame.image.load(os.path.join(resource_path,"ship-14.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-15.png")), pygame.image.load(os.path.join(resource_path,"ship-16.png")), pygame.image.load(os.path.join(resource_path,"ship-17.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-18.png")), pygame.image.load(os.path.join(resource_path,"ship-19.png")), pygame.image.load(os.path.join(resource_path,"ship-20.png")),
+             pygame.image.load(os.path.join(resource_path,"ship-21.png")), pygame.image.load(os.path.join(resource_path,"ship-22.png")), pygame.image.load(os.path.join(resource_path,"ship-23.png"))]
 
 # playerImg = [pygame.image.load("ship-uuu.png"), pygame.image.load("ship-lll.png"), pygame.image.load("ship-ddd.png"),
 # pygame.image.load("ship-rrr.png")]
@@ -59,9 +64,9 @@ num_of_asteroids = 3
 num_of_asteroids_added = 0
 asteroid_speed_max = 0.1
 asteroid_speed_min = 0.02
-asteroidImg = [0, [pygame.image.load("asteroid6.png"), pygame.image.load("asteroid5.png")],
-               [pygame.image.load("asteroid4.png"), pygame.image.load("asteroid3.png")],
-               [pygame.image.load("asteroid2.png"), pygame.image.load("asteroid1.png")]]
+asteroidImg = [0, [pygame.image.load(os.path.join(resource_path,"asteroid6.png")), pygame.image.load(os.path.join(resource_path,"asteroid5.png"))],
+               [pygame.image.load(os.path.join(resource_path,"asteroid4.png")), pygame.image.load(os.path.join(resource_path,"asteroid3.png"))],
+               [pygame.image.load(os.path.join(resource_path,"asteroid2.png")), pygame.image.load(os.path.join(resource_path,"asteroid1.png"))]]
 
 # Asteroid creation
 for i in range(num_of_asteroids):
@@ -78,7 +83,7 @@ for i in range(num_of_asteroids):
 
 # Bullet data declaration
 bullet = []
-bulletImg = pygame.image.load("pew.png")
+bulletImg = pygame.image.load(os.path.join(resource_path,"pew.png"))
 num_of_bullets = 9
 bullet_speed = 0.5
 
@@ -409,7 +414,7 @@ while running and game_level > 0:
             if event.key == pygame.K_SPACE:
                 for i in range(num_of_bullets):  # best bullet velocty, set initial position
                     if bullet[i].get_state() == 0:
-                        bullet_sound = mixer.Sound('pew.wav')
+                        bullet_sound = mixer.Sound(os.path.join(resource_path,'pew.wav'))
                         bullet_sound.play()
                         bullet[i].set_px(player.get_px() + (decoder[player.get_direction()]['px']))
                         bullet[i].set_py(player.get_py() + (decoder[player.get_direction()]['py']))
@@ -606,7 +611,7 @@ while running and game_level > 0:
                     collision = iCollision(asteroid[j].get_px(), asteroid[j].get_py(), bullet[i].get_px(),
                                            bullet[i].get_py(), 'b', j)
                     if collision:
-                        explosion_sound = mixer.Sound('boom.wav')
+                        explosion_sound = mixer.Sound(os.path.join(resource_path,'boom.wav'))
                         explosion_sound.play()
                         # bullet[i].set_py(480)
                         bullet[i].set_state(0)
